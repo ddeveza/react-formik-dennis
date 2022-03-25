@@ -1,5 +1,3 @@
-/** @format */
-
 import React from "react";
 import {useFormik} from "formik";
 import * as Yup from "yup";
@@ -60,7 +58,9 @@ const YoutubeForm = () => {
                     id='name'
                     name='name'
                     className='border-2 border-gray-400 p-1'
-                    {...formik.getFieldProps("name")}
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                    value={formik.values.name}
                 />
 
                 {formik.errors?.name && formik.touched.name && (
@@ -74,7 +74,9 @@ const YoutubeForm = () => {
                     id='email'
                     name='email'
                     className='border-2 border-gray-400 p-1'
-                    {...formik.getFieldProps("email")}
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                    value={formik.values.email}
                 />
                 {formik.errors?.email && formik.touched.email && (
                     <span className='text-red-600'>
@@ -86,8 +88,10 @@ const YoutubeForm = () => {
                     type='text'
                     id='channel'
                     name='channel'
-                    className='border-2  border-gray-400 p-1'
-                    {...formik.getFieldProps("channel")}
+                    className='border-2 border-gray-400 p-1'
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                    value={formik.values.channel}
                 />
                 {formik.errors?.channel && formik.touched.channel && (
                     <span className='text-red-600'>
