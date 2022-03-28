@@ -46,6 +46,12 @@ const validationSchema = Yup.object({
     channel: Yup.string().required("Required"),
 });
 
+const validateComments = (value) => {
+    let err;
+    if (!value) err = "Required";
+    return err;
+};
+
 const YoutubeForm = () => {
     return (
         <Formik
@@ -70,7 +76,10 @@ const YoutubeForm = () => {
                     className='border-2 border-gray-400 p-1'
                 />
                 <ErrorMessage name='email'>
-                    {(err) => <div className='text-red-600'>{err}</div>}
+                    {(err) => {
+                        console.log(err);
+                        return <div className='text-red-600'>{err}</div>;
+                    }}
                 </ErrorMessage>
 
                 <label htmlFor='channel'>Channel</label>
@@ -87,11 +96,14 @@ const YoutubeForm = () => {
                     id='comment'
                     name='comment'
                     className='border-2  border-gray-400 p-1'
+                    validate={validateComments}
                 />
+                <ErrorMessage name='comment' component={TextError} />
                 <label htmlFor='address'>Address</label>
                 <Field name='address'>
                     {(props) => {
                         const {field, meta, form} = props;
+
                         return (
                             <div>
                                 <input
@@ -110,7 +122,6 @@ const YoutubeForm = () => {
                 <label htmlFor='nickName'>Nick Name</label>
                 <FieldArray name='nickName'>
                     {(props) => {
-                        console.log(props);
                         const {form, push, remove} = props;
                         const {values} = form;
                         const {nickName} = values;
