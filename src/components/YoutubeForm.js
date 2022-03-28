@@ -1,8 +1,9 @@
 /** @format */
 
 import React from "react";
-import {Formik, Form, Field, ErrorMessage} from "formik";
+import {Formik, Form, Field, ErrorMessage, FieldArray} from "formik";
 import * as Yup from "yup";
+import TextError from "./TextError";
 
 const emailValidation =
     /^[a-zA-Z0-9.! #$%&'*+/=? ^_`{|}~-]+@[a-zA-Z0-9-]+(?:. [a-zA-Z0-9-]+)*$/;
@@ -13,6 +14,7 @@ const initialValues = {
     channel: "",
     comment: "",
     adress: "",
+    nickName: [""],
 };
 const onSubmit = ({name, email, channel}) => {
     console.log(name, email, channel);
@@ -58,7 +60,7 @@ const YoutubeForm = () => {
                     name='name'
                     className='border-2 border-gray-400 p-1'
                 />
-                <ErrorMessage name='name' className='text-red-700' />
+                <ErrorMessage name='name' component={TextError} />
 
                 <label htmlFor='email'>Email</label>
                 <Field
@@ -67,7 +69,9 @@ const YoutubeForm = () => {
                     name='email'
                     className='border-2 border-gray-400 p-1'
                 />
-                <ErrorMessage name='email' className='text-red-700' />
+                <ErrorMessage name='email'>
+                    {(err) => <div className='text-red-600'>{err}</div>}
+                </ErrorMessage>
 
                 <label htmlFor='channel'>Channel</label>
                 <Field
@@ -103,6 +107,44 @@ const YoutubeForm = () => {
                         );
                     }}
                 </Field>
+                <label htmlFor='nickName'>Nick Name</label>
+                <FieldArray name='nickName'>
+                    {(props) => {
+                        console.log(props);
+                        const {form, push, remove} = props;
+                        const {values} = form;
+                        const {nickName} = values;
+
+                        return (
+                            <div>
+                                {nickName.map((name, index) => {
+                                    return (
+                                        <div key={index}>
+                                            <Field
+                                                name={`nickName[${index}]`}
+                                                className='border-2  border-gray-400 p-1'
+                                            />
+                                            {index > 0 && (
+                                                <button
+                                                    type='button'
+                                                    onClick={() =>
+                                                        remove(index)
+                                                    }>
+                                                    -
+                                                </button>
+                                            )}
+                                            <button
+                                                type='button'
+                                                onClick={() => push("")}>
+                                                +
+                                            </button>
+                                        </div>
+                                    );
+                                })}
+                            </div>
+                        );
+                    }}
+                </FieldArray>
 
                 <button type='submit'>Submit</button>
             </Form>
